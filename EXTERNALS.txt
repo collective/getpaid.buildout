@@ -1,0 +1,4 @@
+#
+# Apply this file: svn propset svn:externals -F EXTERNALS.txt .
+#
+products https://svn.plone.org/svn/plone/bundles/2.5-zope29
