@@ -1,8 +1,10 @@
 #
 # created by: svn propset svn:externals -F ./EXTERNALS.TXT .
 
-getpaid https://svn.plone.org/svn/collective/getpaid/trunk
+#getpaid https://svn.plone.org/svn/collective/getpaid/trunk
 
+getpaid.core https://getpaid.googlecode.com/svn/trunk/getpaid.core
+getpaid.processor.googlecheckout https://getpaid.googlecode.com/svn/trunk/getpaid.processor.googlecheckout
 
 ore.alchemist https://svn.objectrealms.net/svn/public/ore.alchemist/trunk
 ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk
