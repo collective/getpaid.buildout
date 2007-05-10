@@ -8,7 +8,7 @@ ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk
 
 zc.authorizedotnet svn://svn.zope.org/repos/main/zc.authorizedotnet/trunk
 zc.comment svn://svn.zope.org/repos/main/zc.comment/trunk
-zc.table svn://svn.zope.org/repos/main/zc.table/trunk
+zc.table svn://svn.zope.org/repos/main/zc.table/tags/zc.table-0.5.1/
 zc.resourcelibrary svn://svn.zope.org/repos/main/zc.resourcelibrary/tags/zc.resourcelibrary-0.5
 
 
