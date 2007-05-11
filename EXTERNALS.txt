@@ -1,6 +1,8 @@
 #
 # Apply this file: svn propset svn:externals -F EXTERNALS.txt .
 #
-develop-products https://svn.plone.org/svn/collective/PloneGetPaid/bundles/trunk/zproducts
+
+develop-products https://getpaid.googlecode.com/svn/trunk/products
 develop-plone https://svn.plone.org/svn/plone/bundles/2.5-zope29
 develop-debug https://svn.objectrealms.net/svn/public/vendor/z2_dev_bundle
+
