@@ -23,14 +23,14 @@ able to compile the Python C extensions, you better use your OS specific
 package management tools to install it.
 
 For a list of available Windows installers, have a look at
-http://effbot.org/downloads/#PIL. If you are on a Mac using MacPorts you can
+    http://effbot.org/downloads/#PIL. If you are on a Mac using MacPorts you can
 use "sudo port install py-pil" if you use the MacPorts provided Python as a base
 for your ploneout.
 
 How do I use it?
 ----------------
 
-Run the following command from the ploneout directory:
+Run the following command from the getpaid.buildout directory:
 
  $ python bootstrap.py
 
