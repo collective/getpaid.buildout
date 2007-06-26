@@ -12,7 +12,7 @@ ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk
 ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
 
 # workflow engine for orders/checkout wizards, etc.
-hurry.workflow http://codespeak.net/svn/z3/hurry.workflow/tag/hurry.workflow-0.9.1
+hurry.workflow https://getpaid.googlecode.com/svn/trunk/vendor/hurry.workflow/branches/0.9
 
 # payment processor libraries
 zc.authorizedotnet svn://svn.zope.org/repos/main/zc.authorizedotnet/trunk
