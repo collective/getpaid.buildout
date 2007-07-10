@@ -3,7 +3,6 @@
 
 # core
 getpaid.core https://getpaid.googlecode.com/svn/trunk/getpaid.core
-getpaid.processor.googlecheckout https://getpaid.googlecode.com/svn/trunk/getpaid.processor.googlecheckout
 
 # member properties using z3 schemas
 ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk
@@ -13,6 +12,11 @@ ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
 
 # workflow engine for orders/checkout wizards, etc.
 hurry.workflow https://getpaid.googlecode.com/svn/trunk/vendor/hurry.workflow/branches/0.9
+
+# payment processors
+getpaid.googlecheckout https://getpaid.googlecode.com/svn/trunk/getpaid.googlecheckout
+getpaid.authorizedotnet https://getpaid.googlecode.com/svn/trunk/getpaid.authorizedotnet/
+getpaid.paypal https://getpaid.googlecode.com/svn/trunk/getpaid.paypal
 
 # payment processor libraries
 zc.authorizedotnet svn://svn.zope.org/repos/main/zc.authorizedotnet/trunk
