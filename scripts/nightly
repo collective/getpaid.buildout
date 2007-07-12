@@ -1,0 +1,215 @@
+#!/usr/bin/env python2.4
+"""
+grab all the two level namespaces
+"""
+
+import sys, os, tarfile, datetime, optparse
+
+script_dir = os.path.dirname( os.path.abspath(__file__) )
+
+sys.path.insert(0, script_dir)
+
+from pathnode import path
+from gupload import upload as gcode_upload
+
+#################################
+# path extensions
+
+def targz( self, suffix=None ):
+    # create targz file
+    assert self.isdir(), "only use with directories"
+    tfile = self.parent.joinpath( self.name + "-" + suffix + '.tgz' )
+    if tfile.exists():
+        tfile.remove()
+    fh = tarfile.TarFile.open( tfile, 'w:gz')
+    fh.add( self, arcname=self.name )
+    return tfile, fh
+
+def upload( self, summary, labels=None ):
+    # upload file to google code
+    assert self.isfile() and not self.isdir() and not self.islink(), "can only upload files"
+    config_file = path( os.path.join( os.path.expanduser('~'), '.getpaidupload.txt') )
+    assert config_file.exists()
+
+    config_file = config_file.open()
+    user = config_file.readline().split(':')[1].strip()
+    password = config_file.readline().split(':')[1].strip()
+
+    return gcode_upload( self, "getpaid", user, password, summary, labels )
+    
+
+path.targz = targz
+path.upload = upload
+path.to = path.joinpath
+
+#################################
+
+def main( ):
+    parser = optparse.OptionParser(usage='generate [OPTIONS]')
+                                   
+    # options to specify for upload
+    parser.add_option('-r', '--release', dest='release', help='Release Version')
+    parser.add_option('-n', '--nightly', dest='nightly', help='Release Version')    
+    parser.add_option('-s', '--summary', dest='summary', help='Short description of the file')
+    parser.add_option('-l', '--labels', dest='labels', help='An optional list of labels to attach to the file')
+
+    options, args = parser.parse_args()
+    
+    root = path( script_dir ).parent
+
+    tmp_dir = make_temp_dir( root )
+    pkg_src_dir = root.to( 'src' )
+    src_wc_dir = root.to('develop-products', 'PloneGetPaid')
+    
+    assembled_wc = assemble_working_copy( tmp_dir, src_wc_dir, pkg_src_dir )
+
+    five = copy_working_copy( root.to('develop-products', 'Five' ), tmp_dir )
+    remove_svn_dirs( five )
+    clean( five )
+    
+    print "Assembled WC in", tmp_dir
+    
+    # if nightly
+    if options.nightly:
+        nightly_name = datetime.datetime.now().strftime('%Y-%m-%d') 
+        tarball, tarfile = assembled_wc.targz( nightly_name )
+        tarfile.add( five, arcname=five.name )
+        tarfile.close()
+        print "Assembled Nightly Tarball", tarball            
+        #print tarball.upload( summary="Nightly For %s"%nightly_name, labels=("nightly",) )
+        print "Uploaded Nightly Tarball"
+        
+def make_temp_dir( root, location="tmp"):
+    tmp_dir = root.to( location )
+    if not tmp_dir.exists():
+        tmp_dir.mkdir()
+    return tmp_dir
+
+def copy_working_copy( src_wc, target_wc_root ):
+    target_wc = target_wc_root.to( src_wc.name )
+    if target_wc.exists():
+        target_wc.rmtree()
+    src_wc.copytree( target_wc )
+    return target_wc
+
+def assemble_working_copy( working_copy_root, src_wc_directory, source_directory ):
+    """p
+    take a directory / z2 product and assemble it as a product
+    with the extracted source of packages from a buildout.
+    """
+
+    working_copy = copy_working_copy( src_wc_directory, working_copy_root)
+
+    lib_dir = working_copy.to( 'lib' )
+    lib_dir.exists() or lib_dir.mkdir()
+    
+    extract_scm_packages( lib_dir, source_directory )
+
+    # get rid of compiled pycs and other junk
+    clean( working_copy )
+    
+    # for releases and nightlies..
+    remove_svn_dirs( working_copy )
+
+    
+    return working_copy
+
+def extract_scm_packages( lib_dir, scm_directory ):
+
+    for pkg in scm_directory.dirs():
+        
+        source_lib_dir = extract_pkg_libdir( pkg )
+        
+        if not source_lib_dir:
+            continue
+
+        # todo fold target directory manipulation into function create ns
+        target_ns_dir = create_pkg_namespace( lib_dir, pkg.name.split('.')[0] )
+        target_source_dir = target_ns_dir.to( source_lib_dir.name  )
+
+        if target_source_dir.exists():
+            target_source_dir.rmtree()
+
+        source_lib_dir.copytree( target_source_dir )
+
+def remove_svn_dirs( root ):
+    # remove any svn dirs
+    for svn_dir in root.walk('.svn'):
+        if not svn_dir.isdir():
+            continue
+        svn_dir.exists() and svn_dir.rmtree()
+    
+def transfer_package( source, target ):
+    """ copy a p
+    """
+
+def create_pkg_namespace( target, name ):
+    """ target path for namespace package w/ name
+    """
+    template = """\
+# this is a namespace package
+try:
+    import pkg_resources
+    pkg_resources.declare_namespace(__name__)
+except ImportError:
+    import pkgutil
+    __path__ = pkgutil.extend_path(__path__, __name__)
+    """
+    pkg_ns_dir = target.to( name )
+    if not pkg_ns_dir.exists():
+        pkg_ns_dir.mkdir()
+    pkg_init = pkg_ns_dir.to( "__init__.py" )
+    if not pkg_init.exists():
+        pkg_init.touch()
+        fh = open( pkg_init, 'w')
+        fh.write( template )
+        fh.close()
+    return pkg_ns_dir
+
+def extract_pkg_libdir( pkg ):
+    """ extract the top level pkg from a two namespace pkg's base of checkout,
+    with format constraints on source layouts.
+
+    currently supported are things in this style
+       zc.table/src/zc/table
+
+    """
+    # try to find traditional src subdir
+    parts = pkg.name.split('.')
+    if not len(parts) == 2 or not parts[0]: # ignore .svn directories
+        return None
+    top_level_lib = pkg.to('src/%s/%s'%(parts[0], parts[1]) )
+    if not top_level_lib.exists():
+        return None
+    return top_level_lib
+
+#raise AttributeError
+    # try to find top level of two level namespace pkg dir based on package name
+    #else:
+    #    two_level = pkg.name.split('.', 1)[0]
+        
+def clean( dir ):
+
+    for junk in dir.walk('.#*'):
+        junk.remove()
+
+    for junk in dir.walk('*.pyc'):
+        junk.remove()
+
+    for junk in dir.walk('*~'):
+        junk.remove()
+
+    for junk in dir.walk('*.pyo'):
+        junk.remove()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except SystemExit:
+        raise        
+    except:
+        import pdb, sys, traceback
+        traceback.print_exc()
+        pdb.post_mortem( sys.exc_info()[-1] )
+

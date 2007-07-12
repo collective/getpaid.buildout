@@ -1,0 +1,32 @@
+#!/usr/bin/env python2.4
+
+import sys, os
+
+script_dir = os.path.dirname( os.path.abspath(__file__) )
+
+sys.path.insert(0, script_dir)
+
+from pathnode import path
+
+root = path( script_dir ).parent
+
+for dir in [ root.joinpath('src'), root.joinpath('develop-products') ]:
+    clean( dir )
+    
+def clean( dir ):
+
+    for junk in dir.walk('.#*'):
+        print junk
+        junk.remove()
+
+    for junk in dir.walk('*.pyc'):
+        print junk
+        junk.remove()
+
+    for junk in dir.walk('*~'):
+        print junk
+        junk.remove()
+
+    for junk in dir.walk('*.pyo'):
+        print junk
+        junk.remove()
