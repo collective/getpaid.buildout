@@ -10,9 +10,6 @@ from pathnode import path
 
 root = path( script_dir ).parent
 
-for dir in [ root.joinpath('src'), root.joinpath('develop-products') ]:
-    clean( dir )
-    
 def clean( dir ):
 
     for junk in dir.walk('.#*'):
@@ -30,3 +27,7 @@ def clean( dir ):
     for junk in dir.walk('*.pyo'):
         print junk
         junk.remove()
+
+for dir in [ root.joinpath('src'), root.joinpath('develop-products') ]:
+    clean( dir )
+    

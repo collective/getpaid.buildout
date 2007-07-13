@@ -93,7 +93,7 @@ def copy_working_copy( src_wc, target_wc_root ):
     return target_wc
 
 def assemble_working_copy( working_copy_root, src_wc_directory, source_directory ):
-    """p
+    """
     take a directory / z2 product and assemble it as a product
     with the extracted source of packages from a buildout.
     """
@@ -123,9 +123,11 @@ def extract_scm_packages( lib_dir, scm_directory ):
         if not source_lib_dir:
             continue
 
-        # todo fold target directory manipulation into function create ns
-        target_ns_dir = create_pkg_namespace( lib_dir, pkg.name.split('.')[0] )
-        target_source_dir = target_ns_dir.to( source_lib_dir.name  )
+        if '.' in pkg.name: # two level package namespace
+            target_ns_dir = create_pkg_namespace( lib_dir, pkg.name.split('.')[0] )
+            target_source_dir = target_ns_dir.to( source_lib_dir.name  )
+        else: # flat namespace
+            target_source_dir = lib_dir.to( pkg.name )
 
         if target_source_dir.exists():
             target_source_dir.rmtree()
@@ -171,23 +173,29 @@ def extract_pkg_libdir( pkg ):
     with format constraints on source layouts.
 
     currently supported are things in this style
-       zc.table/src/zc/table
+       - zc.table/src/zc/table
+       so passing zc.table will return the full path to the nested table directory
 
+       - gchecky/gchecky
+       flat namespace with pkg source in checkout of the same name
     """
     # try to find traditional src subdir
+    if not '.' in pkg.name:
+        pkg_src_dir =  pkg.to( pkg.name )
+        if pkg_src_dir.exists():
+            return pkg_src_dir
+        return None
+    
     parts = pkg.name.split('.')
     if not len(parts) == 2 or not parts[0]: # ignore .svn directories
         return None
     top_level_lib = pkg.to('src/%s/%s'%(parts[0], parts[1]) )
+    
     if not top_level_lib.exists():
         return None
+    
     return top_level_lib
 
-#raise AttributeError
-    # try to find top level of two level namespace pkg dir based on package name
-    #else:
-    #    two_level = pkg.name.split('.', 1)[0]
-        
 def clean( dir ):
 
     for junk in dir.walk('.#*'):
