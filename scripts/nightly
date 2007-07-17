@@ -62,10 +62,7 @@ def main( ):
     src_wc_dir = root.to('develop-products', 'PloneGetPaid')
     
     assembled_wc = assemble_working_copy( tmp_dir, src_wc_dir, pkg_src_dir )
-
-    five = copy_working_copy( root.to('develop-products', 'Five' ), tmp_dir )
-    remove_svn_dirs( five )
-    clean( five )
+    support_products = copy_support_products( root, tmp_dir )
     
     print "Assembled WC in", tmp_dir
     
@@ -73,17 +70,29 @@ def main( ):
     if options.nightly:
         nightly_name = datetime.datetime.now().strftime('%Y-%m-%d') 
         tarball, tarfile = assembled_wc.targz( nightly_name )
-        tarfile.add( five, arcname=five.name )
+        for sp in support_products:
+            tarfile.add( sp, arcname=sp.name )
         tarfile.close()
         print "Assembled Nightly Tarball", tarball            
-        #print tarball.upload( summary="Nightly For %s"%nightly_name, labels=("nightly",) )
-        print "Uploaded Nightly Tarball"
+        results = tarball.upload( summary="Nightly For %s"%nightly_name, labels=("nightly",) )
+        print "Uploaded Nightly Tarball", results
         
 def make_temp_dir( root, location="tmp"):
     tmp_dir = root.to( location )
     if not tmp_dir.exists():
         tmp_dir.mkdir()
     return tmp_dir
+
+def copy_support_products( root, tmp_dir ):
+    five = copy_working_copy( root.to('develop-products', 'Five' ), tmp_dir )
+    remove_svn_dirs( five )
+    clean( five )
+
+    cmfonfive = copy_working_copy( root.to('develop-products', 'CMFonFive'), tmp_dir)
+    remove_svn_dirs( cmfonfive )
+    clean( cmfonfive )
+    
+    return five, cmfonfive
 
 def copy_working_copy( src_wc, target_wc_root ):
     target_wc = target_wc_root.to( src_wc.name )
@@ -178,8 +187,10 @@ def extract_pkg_libdir( pkg ):
 
        - gchecky/gchecky
        flat namespace with pkg source in checkout of the same name
+
+       - five.intid/five/intid
     """
-    # try to find traditional src subdir
+
     if not '.' in pkg.name:
         pkg_src_dir =  pkg.to( pkg.name )
         if pkg_src_dir.exists():
@@ -189,12 +200,18 @@ def extract_pkg_libdir( pkg ):
     parts = pkg.name.split('.')
     if not len(parts) == 2 or not parts[0]: # ignore .svn directories
         return None
+    
     top_level_lib = pkg.to('src/%s/%s'%(parts[0], parts[1]) )
     
-    if not top_level_lib.exists():
-        return None
-    
-    return top_level_lib
+    if top_level_lib.exists():
+        return top_level_lib
+
+    top_level_lib = pkg.to('%s/%s'%(parts[0], parts[1] ) )
+
+    if top_level_lib.exists():
+        return top_level_lib
+
+    return None
 
 def clean( dir ):
 
