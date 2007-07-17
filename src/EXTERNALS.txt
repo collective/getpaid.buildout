@@ -10,6 +10,9 @@ ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk
 # various viewlet conviences 
 ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
 
+# integer object references
+five.intid https://svn.plone.org/svn/collective/five.intid/trunk
+
 # workflow engine for orders/checkout wizards, etc.
 hurry.workflow https://getpaid.googlecode.com/svn/trunk/vendor/hurry.workflow/branches/0.9
 
@@ -25,5 +28,11 @@ gchecky http://gchecky.googlecode.com/svn/trunk/
 # programatic table creation and deps
 zc.table svn://svn.zope.org/repos/main/zc.table/tags/zc.table-0.5.1
 zc.resourcelibrary svn://svn.zope.org/repos/main/zc.resourcelibrary/tags/zc.resourcelibrary-0.5
+
+# batching
+yoma.batching https://getpaid.googlecode.com/svn/trunk/vendor/yoma.batching
+
+# form layout
+yoma.layout https://getpaid.googlecode.com/svn/trunk/vendor/yoma.layout
 
 
