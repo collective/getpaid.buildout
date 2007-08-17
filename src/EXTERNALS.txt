@@ -33,4 +33,5 @@ yoma.batching https://getpaid.googlecode.com/svn/trunk/vendor/yoma.batching
 # form layout
 yoma.layout https://getpaid.googlecode.com/svn/trunk/vendor/yoma.layout
 
-
+# recipes
+plone.recipe.distros https://svn.plone.org/svn/collective/buildout/plone.recipe.distros/trunk
