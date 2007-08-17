@@ -4,9 +4,6 @@
 # core
 getpaid.core https://getpaid.googlecode.com/svn/trunk/getpaid.core
 
-# member properties using z3 schemas
-ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk
-
 # various viewlet conviences 
 ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
 
