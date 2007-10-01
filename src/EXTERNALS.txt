@@ -4,8 +4,14 @@
 # core
 getpaid.core https://getpaid.googlecode.com/svn/trunk/getpaid.core
 
+# import / export 
+getpaid.io https://getpaid.googlecode.com/svn/trunk/getpaid.io
+
 # various viewlet conviences 
 ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
+
+# python xml object marshalling
+ore.xd https://svn.objectrealms.net/svn/public/ore.xd/trunk
 
 # integer object references
 five.intid https://svn.plone.org/svn/collective/five.intid/trunk
@@ -30,6 +36,4 @@ zc.resourcelibrary svn://svn.zope.org/repos/main/zc.resourcelibrary/tags/zc.reso
 # batching
 yoma.batching https://getpaid.googlecode.com/svn/trunk/vendor/yoma.batching
 
-# recipes
-plone.recipe.distros https://svn.plone.org/svn/collective/buildout/plone.recipe.distros/trunk
 
