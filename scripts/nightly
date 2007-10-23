@@ -84,7 +84,7 @@ def make_temp_dir( root, location="tmp"):
     return tmp_dir
 
 def copy_support_products( root, tmp_dir ):
-    five = copy_working_copy( root.to('develop-products', 'Five' ), tmp_dir )
+    five = copy_working_copy( root.to('parts', 'five' ), tmp_dir )
     remove_svn_dirs( five )
     clean( five )
 
