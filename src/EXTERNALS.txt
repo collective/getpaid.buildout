@@ -24,6 +24,7 @@ getpaid.googlecheckout https://getpaid.googlecode.com/svn/trunk/getpaid.googlech
 getpaid.authorizedotnet https://getpaid.googlecode.com/svn/trunk/getpaid.authorizedotnet/
 getpaid.paypal https://getpaid.googlecode.com/svn/trunk/getpaid.paypal
 getpaid.nullpayment https://getpaid.googlecode.com/svn/trunk/getpaid.nullpayment
+getpaid.paymentech https://getpaid.googlecode.com/svn/trunk/getpaid.paymentech
 
 # payment processor libraries
 zc.authorizedotnet svn://svn.zope.org/repos/main/zc.authorizedotnet/trunk
