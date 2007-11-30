@@ -88,7 +88,7 @@ def copy_support_products( root, tmp_dir ):
     remove_svn_dirs( five )
     clean( five )
 
-    cmfonfive = copy_working_copy( root.to('develop-products', 'CMFonFive'), tmp_dir)
+    cmfonfive = copy_working_copy( root.to('parts', 'productdistros', 'CMFonFive'), tmp_dir)
     remove_svn_dirs( cmfonfive )
     clean( cmfonfive )
     
