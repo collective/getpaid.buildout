@@ -63,8 +63,9 @@ def main( ):
     # Our main product:
     src_wc_dir = root.to('develop-products', 'PloneGetPaid')
 
-    assembled_wc = assemble_working_copy( tmp_dir, src_wc_dir, pkg_src_dir )
-    products_dir = tmp_dir.to( 'Products' )
+    bundle_dir = make_bundle_dir(tmp_dir)
+    assembled_wc = assemble_working_copy( bundle_dir, src_wc_dir, pkg_src_dir )
+    products_dir = bundle_dir.to( 'Products' )
     support_products = copy_support_products( root, products_dir )
 
     print "Assembled WC in", tmp_dir
@@ -72,13 +73,21 @@ def main( ):
     # if nightly
     if options.nightly:
         nightly_name = datetime.datetime.now().strftime('%Y-%m-%d') 
-        tarball, tarfile = assembled_wc.targz( nightly_name )
+        tarball, tarfile = bundle_dir.targz( nightly_name )
         tarfile.close()
         print "Assembled Nightly Tarball", tarball            
         results = tarball.upload( summary="Nightly For %s"%nightly_name, labels=("nightly",) )
         print "Uploaded Nightly Tarball", results
         
 def make_temp_dir( root, location="tmp"):
+    tmp_dir = root.to( location )
+    if not tmp_dir.exists():
+        tmp_dir.mkdir()
+    return tmp_dir
+
+def make_bundle_dir( root, location="PloneGetPaid-bundle"):
+    """Bundle directory that is getting tarred.
+    """
     tmp_dir = root.to( location )
     if not tmp_dir.exists():
         tmp_dir.mkdir()
