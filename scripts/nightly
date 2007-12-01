@@ -149,7 +149,7 @@ def assemble_working_copy( working_copy_root, src_wc_directory, source_directory
     extract_scm_packages( lib_dir, source_directory )
 
     # get rid of compiled pycs and other junk
-    clean( working_copy )
+    clean( working_copy_root )
     
     # for releases and nightlies..
     remove_svn_dirs( working_copy_root )
