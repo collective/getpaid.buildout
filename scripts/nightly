@@ -90,14 +90,13 @@ def copy_support_products( root, target_wc_root ):
     Note: Five and CMFonFive are not needed with Plone 3.0.
     """
     found = []
-    support_dir = root.to('parts', 'productdistros')
-    five_dir = support_dir.to('Five')
+    five_dir = root.to('parts', 'productdistros', 'Five')
     if five_dir.exists():
         five = copy_working_copy( five_dir, target_wc_root )
         remove_svn_dirs( five )
         clean( five )
         found.append(five)
-    cmfonfive_dir = support_dir.to('CMFonFive')
+    cmfonfive_dir = root.to('parts', 'productcheckouts', 'CMFonFive')
     if cmfonfive_dir.exists():
         cmfonfive = copy_working_copy( cmfonfive_dir, target_wc_root)
         remove_svn_dirs( cmfonfive )
