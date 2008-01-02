@@ -15,11 +15,17 @@ instance.  (On Windows: lib\python.)
 Also, you will need the following python packages:
 
 - simplejson
+
 - dateutil
 
-Install them with the standard package tools available for your
-platform or with easy-install.
+- zc.ssl (if you want to use the getpaid.paymentech package)
 
+Install them with the standard package tools available for your
+platform or with easy-install.  See:
+
+- http://wiki.python.org/moin/CheeseShopTutorial
+
+- http://peak.telecommunity.com/DevCenter/EasyInstall
 
 For further instructions and more info see the readme.txt file in
 the PloneGetPaid dir within Products.
