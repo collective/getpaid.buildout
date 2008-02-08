@@ -4,6 +4,9 @@
 # core
 getpaid.core https://getpaid.googlecode.com/svn/trunk/getpaid.core
 
+# checkout wizards
+getpaid.wizard https://getpaid.googlecode.com/svn/trunk/getpaid.wizard
+
 # import / export 
 getpaid.io https://getpaid.googlecode.com/svn/trunk/getpaid.io
 
@@ -28,6 +31,7 @@ getpaid.paymentech https://getpaid.googlecode.com/svn/trunk/getpaid.paymentech
 
 # shipping methods
 getpaid.flatrateshipping https://getpaid.googlecode.com/svn/trunk/getpaid.flatrateshipping
+getpaid.ups https://getpaid.googlecode.com/svn/trunk/getpaid.ups
 
 # payment processor libraries
 zc.authorizedotnet svn://svn.zope.org/repos/main/zc.authorizedotnet/trunk
