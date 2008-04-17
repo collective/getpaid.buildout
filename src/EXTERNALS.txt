@@ -44,4 +44,5 @@ zc.resourcelibrary svn://svn.zope.org/repos/main/zc.resourcelibrary/tags/zc.reso
 # batching
 yoma.batching https://getpaid.googlecode.com/svn/trunk/vendor/yoma.batching
 
-
+# discount
+getpaid.discount https://getpaid.googlecode.com/svn/trunk/getpaid.discount/
