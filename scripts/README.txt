@@ -28,4 +28,4 @@ platform or with easy-install.  See:
 - http://peak.telecommunity.com/DevCenter/EasyInstall
 
 For further instructions and more info see the readme.txt file in
-the PloneGetPaid dir within Products.
+the Products/PloneGetPaid and the contents of Products/PloneGetPaid/docs.
