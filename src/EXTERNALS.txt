@@ -25,9 +25,9 @@ hurry.workflow https://getpaid.googlecode.com/svn/trunk/vendor/hurry.workflow/br
 # payment processors
 getpaid.googlecheckout https://getpaid.googlecode.com/svn/trunk/getpaid.googlecheckout
 getpaid.authorizedotnet https://getpaid.googlecode.com/svn/trunk/getpaid.authorizedotnet/
-getpaid.paypal https://getpaid.googlecode.com/svn/trunk/getpaid.paypal
 getpaid.nullpayment https://getpaid.googlecode.com/svn/trunk/getpaid.nullpayment
 getpaid.paymentech https://getpaid.googlecode.com/svn/trunk/getpaid.paymentech
+getpaid.pxpay https://getpaid.googlecode.com/svn/trunk/getpaid.pxpay
 
 # shipping methods
 getpaid.flatrateshipping https://getpaid.googlecode.com/svn/trunk/getpaid.flatrateshipping
