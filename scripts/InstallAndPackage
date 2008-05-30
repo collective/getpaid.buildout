@@ -1,0 +1,95 @@
+#!/bin/bash
+#Stuff we would like the user chooses
+INSTANCE=$PWD
+PGPVERSION='trunk' # branches/0.3, branches/0.6
+echo "Fetching the available version list, please wait"
+whiptail --infobox "Fetching the available version list, please wait" 10 30
+AVAILVERSIONS=$(echo "trunk/"; svn ls http://getpaid.googlecode.com/svn/tags | while read tag; do echo "tags/$tag"; done; svn ls http://getpaid.googlecode.com/svn/branches | while read branch; do echo "branches/$branch"; done) 
+PGPVERSION=$(whiptail --title "Please choose a version"  --radiolist version 20 60 15 $( echo -e "$AVAILVERSIONS" | while read AVAILVERSION; do echo "$AVAILVERSION '' off"; done) 2>&1 >$(tty))
+ACTION=$(whiptail --title "What do you want to do" --radiolist action 15 30 5 Install '' on 'Make Package' '' off 2>&1 >$(tty))
+GETMETHOD='export'
+BUNDLENAME="PloneGetPaid-bundle"
+PGPREPO=http://getpaid.googlecode.com/svn/${PGPVERSION}/getpaid.buildout/
+GET='svn '${GETMETHOD}' '${PGPREPO}
+
+#src eggs EXTERNALS, we get a list of the ones required by a basic GP buildout
+echo "Fetching the list of packages please wait..."
+GETSRC=${GET}'src/EXTERNALS.txt'
+
+#We will take from here all the products required by PGP buildout
+#Altough they may always be the same we better check
+echo "Fetching the list of products please wait..."
+GETDP=${GET}'EXTERNALS.txt'
+
+#We will need a place to download all the packages and EXTERNALS files
+TARGET_DIR='get_paid_installer/'${PGPVERSION}
+mkdir -p $TARGET_DIR
+cd $TARGET_DIR
+
+#Fetch the root externals list
+${GETDP} buildout_root_externals.txt
+SVN_PRODUCTS_FOLDER=$(cat buildout_root_externals.txt | grep develop-products | cut -d ' ' -f 2)
+
+#Get the products folder
+echo "Ferching the products folder"
+svn ${GETMETHOD} ${SVN_PRODUCTS_FOLDER} Products
+
+#Fetch the src eggs externals list
+echo "Fetching the packages (lib) folder"
+${GETSRC} buildout_src_externals.txt
+
+#Get the eggs from the list to our own src dir
+mkdir -p src
+perl -p -we '/^\s*\#/ or s/^(\S+)\s+(\S+)$/$2 src\/$1\n/' buildout_src_externals.txt | while read repo_entry;
+do 
+    if [ -n "${repo_entry}" ] ; then
+        if [[ ${repo_entry} != \#* ]] ; then
+            svn ${GETMETHOD} ${repo_entry}
+        fi
+    fi ;
+done
+
+case "$ACTION" in
+    "Install") 
+#Extra paranoids, we check if Products exists
+#Then we copy the fetched products to our current install
+if [ -d Products ] ; then
+    for PGPPRODUCT in $(ls Products);
+    do 
+        if [ ! -d  $INSTANCE/Products/$PGPPRODUCT ] ; then
+            #Only copy if this directory does not exists, just in case
+            cp -R Products/$PGPPRODUCT $INSTANCE/Products/
+        fi;
+    done
+fi
+
+for PGPEGG in $(ls src) ;
+do
+    #I seriously hope this will keep being the general rule for path names
+    cp -Rf src/$PGPEGG/src/$(echo $PGPEGG| cut -d'.' -f 1) $INSTANCE/lib/python/ || cp -Rf src/$PGPEGG/$(echo $PGPEGG| cut -d'.' -f 1) $INSTANCE/lib/python/ ;
+done
+;;
+    "Make Package")
+    VERSION=$(whiptail --inputbox "Please Enter The Release Version for ${PGPVERSION}" 0 30 2>&1 >$(tty))   
+    mkdir -p $BUNDLENAME
+    mkdir -p $BUNDLENAME/Products
+    mkdir -p $BUNDLENAME/lib/python
+    svn ${GETMETHOD} http://getpaid.googlecode.com/svn/${PGPVERSION}/getpaid.buildout/scripts/README.txt $BUNDLENAME/README.txt
+
+    for PGPPRODUCT in $(ls Products);
+    do
+            #Only copy if this directory does not exists, just in case
+            cp -R Products/$PGPPRODUCT $BUNDLENAME/Products/;
+    done
+
+
+    for PGPEGG in $(ls src) ;
+    do
+        #I seriously hope this will keep being the general rule for path names
+        cp -Rf src/$PGPEGG/src/$(echo $PGPEGG| cut -d'.' -f 1) $BUNDLENAME/lib/python/ || cp -Rf src/$PGPEGG/$(echo $PGPEGG| cut -d'.' -f 1) $BUNDLENAME/lib/python/ ;
+    done
+    tar czf ${BUNDLENAME}-${VERSION}.tar.gz ${BUNDLENAME}
+
+;;
+esac
+echo "Don't forget to install simplejson and dateutil "
