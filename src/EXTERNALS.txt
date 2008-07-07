@@ -1,5 +1,5 @@
 #
-# created by: svn propset svn:externals -F ./EXTERNALS.TXT .
+# created by: svn propset svn:externals -F ./EXTERNALS.txt .
 
 # core
 getpaid.core https://getpaid.googlecode.com/svn/trunk/getpaid.core
