@@ -20,7 +20,7 @@ ore.xd https://svn.objectrealms.net/svn/public/ore.xd/trunk
 five.intid https://svn.plone.org/svn/collective/five.intid/trunk
 
 # workflow engine for orders/checkout wizards, etc.
-hurry.workflow https://getpaid.googlecode.com/svn/trunk/vendor/hurry.workflow/branches/0.9
+hurry.workflow https://getpaid.googlecode.com/svn/vendor/hurry.workflow/branches/0.9
 
 # payment processors
 getpaid.googlecheckout https://getpaid.googlecode.com/svn/trunk/getpaid.googlecheckout
@@ -42,7 +42,7 @@ zc.table svn://svn.zope.org/repos/main/zc.table/tags/zc.table-0.5.1
 zc.resourcelibrary svn://svn.zope.org/repos/main/zc.resourcelibrary/tags/zc.resourcelibrary-0.5
 
 # batching
-yoma.batching https://getpaid.googlecode.com/svn/trunk/vendor/yoma.batching
+yoma.batching https://getpaid.googlecode.com/svn/vendor/yoma.batching
 
 # discount
 getpaid.discount https://getpaid.googlecode.com/svn/trunk/getpaid.discount/
