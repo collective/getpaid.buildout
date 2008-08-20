@@ -1,0 +1,50 @@
+ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk/
+
+#
+# created by: svn propset svn:externals -F ./EXTERNALS.txt .
+
+# core
+getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/trunk
+
+# checkout wizards
+getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/trunk
+
+# import / export 
+getpaid.io https://getpaid.googlecode.com/svn/getpaid.io/trunk
+
+# various viewlet conviences 
+ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
+
+# python xml object marshalling
+ore.xd https://svn.objectrealms.net/svn/public/ore.xd/trunk
+
+# integer object references
+five.intid https://svn.plone.org/svn/collective/five.intid/trunk
+
+# workflow engine for orders/checkout wizards, etc.
+hurry.workflow https://getpaid.googlecode.com/svn/vendor/hurry.workflow/branches/0.9
+
+# payment processors
+getpaid.googlecheckout https://getpaid.googlecode.com/svn/getpaid.googlecheckout/trunk
+getpaid.authorizedotnet https://getpaid.googlecode.com/svn/getpaid.authorizedotnet/trunk
+getpaid.nullpayment https://getpaid.googlecode.com/svn/getpaid.nullpayment/trunk
+getpaid.paymentech https://getpaid.googlecode.com/svn/getpaid.paymentech/trunk
+getpaid.pxpay https://getpaid.googlecode.com/svn/getpaid.pxpay/trunk
+
+# shipping methods
+getpaid.flatrateshipping https://getpaid.googlecode.com/svn/getpaid.flatrateshipping/trunk
+getpaid.ups https://getpaid.googlecode.com/svn/getpaid.ups/trunk
+
+# payment processor libraries
+zc.authorizedotnet svn://svn.zope.org/repos/main/zc.authorizedotnet/trunk
+gchecky http://gchecky.googlecode.com/svn/trunk/
+
+# programatic table creation and deps
+zc.table svn://svn.zope.org/repos/main/zc.table/tags/zc.table-0.5.1
+zc.resourcelibrary svn://svn.zope.org/repos/main/zc.resourcelibrary/tags/zc.resourcelibrary-0.5
+
+# batching
+yoma.batching https://getpaid.googlecode.com/svn/vendor/yoma.batching
+
+# discount
+getpaid.discount https://getpaid.googlecode.com/svn/getpaid.discount/trunk
