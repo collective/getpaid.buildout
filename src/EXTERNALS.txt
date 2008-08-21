@@ -11,10 +11,10 @@ getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/trunk
 getpaid.io https://getpaid.googlecode.com/svn/getpaid.io/trunk
 
 # various viewlet conviences 
-ore.viewlet https://svn.objectrealms.net/svn/public/ore.viewlet/trunk
+ore.viewlet https://getpaid.googlecode.com/svn/vendor/ore.viewlet/trunk/
 
 # python xml object marshalling
-ore.xd https://svn.objectrealms.net/svn/public/ore.xd/trunk
+#ore.xd https://svn.objectrealms.net/svn/public/ore.xd/trunk
 
 # integer object references
 five.intid https://svn.plone.org/svn/collective/five.intid/trunk
