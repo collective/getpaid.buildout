@@ -8,7 +8,7 @@ getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/trunk
 getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/trunk
 
 # import / export 
-getpaid.io https://getpaid.googlecode.com/svn/getpaid.io/trunk
+#getpaid.io https://getpaid.googlecode.com/svn/getpaid.io/trunk
 
 # various viewlet conviences 
 ore.viewlet https://getpaid.googlecode.com/svn/vendor/ore.viewlet/trunk/
