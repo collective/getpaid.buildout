@@ -5,6 +5,7 @@ ore.member https://svn.objectrealms.net/svn/public/ore.member/trunk/
 
 # core
 getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/trunk
+Products.PloneGetPaid https://getpaid.googlecode.com/svn/Products.PloneGetPaid/trunk/ 
 
 # checkout wizards
 getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/trunk
