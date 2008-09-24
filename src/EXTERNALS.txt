@@ -30,6 +30,7 @@ getpaid.googlecheckout https://getpaid.googlecode.com/svn/getpaid.googlecheckout
 getpaid.authorizedotnet https://getpaid.googlecode.com/svn/getpaid.authorizedotnet/trunk
 getpaid.nullpayment https://getpaid.googlecode.com/svn/getpaid.nullpayment/trunk
 getpaid.paymentech https://getpaid.googlecode.com/svn/getpaid.paymentech/trunk
+getpaid.paypal https://getpaid.googlecode.com/svn/getpaid.paypal/trunk/
 getpaid.pxpay https://getpaid.googlecode.com/svn/getpaid.pxpay/trunk
 
 # shipping methods
