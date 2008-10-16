@@ -6,3 +6,4 @@
 #develop-plone https://svn.plone.org/svn/plone/bundles/2.5-zope29
 #develop-debug https://svn.objectrealms.net/svn/public/vendor/z2_dev_bundle
 wiki https://getpaid.googlecode.com/svn/wiki
+#recipes https://getpaid.googlecode.com/svn/getpaid.buildout/trunk/recipes/
