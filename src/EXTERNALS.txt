@@ -2,13 +2,13 @@
 # created by: svn propset svn:externals -F ./EXTERNALS.txt .
 
 # PloneGetPaid product
-Products.PloneGetPaid https://getpaid.googlecode.com/svn/Products.PloneGetPaid/trunk/
+Products.PloneGetPaid https://getpaid.googlecode.com/svn/Products.PloneGetPaid/branches/overridecide/
 
 # core
-getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/trunk
+getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/branches/overridecide
 
 # checkout wizards
-getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/trunk
+getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/branches/overridecide/
 
 # import / export
 #getpaid.io https://getpaid.googlecode.com/svn/getpaid.io/trunk
