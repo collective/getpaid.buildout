@@ -54,3 +54,8 @@ yoma.batching https://getpaid.googlecode.com/svn/vendor/yoma.batching
 
 # discount
 getpaid.discount https://getpaid.googlecode.com/svn/getpaid.discount/trunk
+
+# others
+
+getpaid.report https://getpaid.googlecode.com/svn/getpaid.report/trunk/
+getpaid.warehouse https://getpaid.googlecode.com/svn/getpaid.warehouse/trunk/
