@@ -34,6 +34,7 @@ getpaid.authorizedotnet https://getpaid.googlecode.com/svn/getpaid.authorizedotn
 getpaid.nullpayment https://getpaid.googlecode.com/svn/getpaid.nullpayment/trunk
 getpaid.paymentech https://getpaid.googlecode.com/svn/getpaid.paymentech/trunk
 getpaid.paypal https://getpaid.googlecode.com/svn/getpaid.paypal/trunk/
+getpaid.payflowpro https://getpaid.googlecode.com/svn/getpaid.payflowpro/trunk/
 #getpaid.ogone https://getpaid.googlecode.com/svn/getpaid.ogone/trunk
 getpaid.pxpay https://getpaid.googlecode.com/svn/getpaid.pxpay/trunk
 
