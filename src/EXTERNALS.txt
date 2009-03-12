@@ -60,3 +60,6 @@ getpaid.discount https://getpaid.googlecode.com/svn/getpaid.discount/trunk
 
 getpaid.report https://getpaid.googlecode.com/svn/getpaid.report/trunk/
 getpaid.warehouse https://getpaid.googlecode.com/svn/getpaid.warehouse/trunk/
+
+# PloneGetPaid Salesforce integration
+Products.SalesforceGetPaidAdapter https://getpaid.googlecode.com/svn/Products.SalesforceGetPaidAdapter/trunk/
