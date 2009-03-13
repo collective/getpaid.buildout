@@ -5,3 +5,5 @@
 instance
 log
 filestorage
+instance.pid
+instance.lock
