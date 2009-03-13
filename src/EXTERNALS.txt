@@ -60,3 +60,4 @@ getpaid.discount https://getpaid.googlecode.com/svn/getpaid.discount/trunk
 
 getpaid.report https://getpaid.googlecode.com/svn/getpaid.report/trunk/
 getpaid.warehouse https://getpaid.googlecode.com/svn/getpaid.warehouse/trunk/
+getpaid.formgen https://getpaid.googlecode.com/svn/getpaid.formgen/trunk/
