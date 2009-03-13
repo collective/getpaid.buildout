@@ -37,6 +37,8 @@ getpaid.paypal https://getpaid.googlecode.com/svn/getpaid.paypal/trunk/
 getpaid.payflowpro https://getpaid.googlecode.com/svn/getpaid.payflowpro/trunk/
 getpaid.ogone https://getpaid.googlecode.com/svn/getpaid.ogone/trunk
 getpaid.pxpay https://getpaid.googlecode.com/svn/getpaid.pxpay/trunk
+getpaid.clickandbuy https://getpaid.googlecode.com/svn/getpaid.clickandbuy/trunk/
+getpaid.pagseguro https://getpaid.googlecode.com/svn/getpaid.pagseguro/trunk/
 
 # shipping methods
 getpaid.flatrateshipping https://getpaid.googlecode.com/svn/getpaid.flatrateshipping/trunk
