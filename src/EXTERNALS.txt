@@ -66,4 +66,4 @@ getpaid.warehouse https://getpaid.googlecode.com/svn/getpaid.warehouse/trunk/
 getpaid.formgen https://getpaid.googlecode.com/svn/getpaid.formgen/trunk/
 
 # PloneGetPaid Salesforce integration
-Products.SalesforceGetPaidAdapter https://getpaid.googlecode.com/svn/Products.SalesforceGetPaidAdapter/trunk/
+getpaid.SalesforcePloneFormGenAdapter https://getpaid.googlecode.com/svn/getpaid.SalesforcePloneFormGenAdapter/trunk/
