@@ -67,3 +67,4 @@ getpaid.formgen https://getpaid.googlecode.com/svn/getpaid.formgen/trunk/
 
 # PloneGetPaid Salesforce integration
 getpaid.SalesforcePloneFormGenAdapter https://getpaid.googlecode.com/svn/getpaid.SalesforcePloneFormGenAdapter/trunk/
+getpaid.SalesforceOrderRecorder https://getpaid.googlecode.com/svn/getpaid.SalesforceOrderRecorder/trunk/
