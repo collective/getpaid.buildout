@@ -18,6 +18,5 @@
 
    <include package=".browser" />
    <include package=".ipn" />
-   <include file="vocabulary.zcml" />
 
 </configure>

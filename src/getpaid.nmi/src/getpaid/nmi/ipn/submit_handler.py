@@ -24,14 +24,16 @@ class Listener(BrowserView):
         cart=cartutil.get(self.portal, create=True)
         processor = queryAdapter(cart, IOffsitePaymentProcessor, 'getpaid.nmi.processor')
         processor.options = processor.options_interface(self.portal)
-        
-        is_valid_IPN = self.verify(processor.key)
-        if not is_valid_IPN:
-            logger.debug('received bogus IPN')
-            return
         form = self.request.form
         orderid = form['orderid']
         response = form['response']
+        responsetext = form['responsetext']
+        
+        is_valid_IPN = self.verify(processor.key)
+        if not is_valid_IPN:
+            logger.debug('received bogus IPN: %s' % responsetext)
+            return self.request.response.redirect('%s/@@getpaid.nmi.error?orderid=%s' %
+                                                  (self.portal.absolute_url(), orderid))
         order_manager = getUtility(IOrderManager)
         if orderid in order_manager:
             order = order_manager.get(orderid)
@@ -43,14 +45,15 @@ class Listener(BrowserView):
                                                       (self.portal.absolute_url(), orderid))
             elif response == '2': # Declined
                 order.finance_workflow.fireTransition('decline-charging')
-                logger.debug('received unsuccessful IPN payment notification for order %s' % orderid)
-                return
+                logger.debug('received unsuccessful IPN payment notification for order %s, %s' \
+                             % (orderid, responsetext))
             else: # Error
-                logger.debug('Error in transaction')
-                return
-        # invoice not in cart
-        logger.debug('received IPN that does not apply to any order number - order "%s"' % orderid)
-        return 
+                logger.debug('Error in transaction for order %s, %s' % (orderid, responsetext))
+        else:
+            # invoice not in cart
+            logger.debug('received IPN that does not apply to any order number - order "%s"' % orderid)
+        return self.request.response.redirect('%s/@@getpaid.nmi.error?orderid=%s' %
+                                              (self.portal.absolute_url(), orderid))
         
     def compare_cart(self, notification, order):
         for ref in order.shopping_cart.keys():

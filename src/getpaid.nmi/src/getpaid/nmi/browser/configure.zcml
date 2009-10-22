@@ -26,6 +26,14 @@
       permission="zope2.View"
       />
 
+   <browser:page
+      for="*"
+      name="getpaid.nmi.error"
+      class=".views.Error"
+      template="templates/error.pt"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".views.CheckoutWidgets"
       />

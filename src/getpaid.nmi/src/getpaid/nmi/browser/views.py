@@ -39,6 +39,8 @@ class CheckoutCCNumberForm(form.Form):
 
     @button.buttonAndHandler(u'Network Merchants Secure Payment')
     def handlePay(self, action):
+        # Action points to external processor
+        # so this code is never reached...
         pass
     
 class CheckoutWidgets(field.FieldWidgets):
@@ -52,12 +54,9 @@ class CheckoutCCNumberWrapper(FormWrapper):
 
     def __init__(self, context, request):
         super(CheckoutCCNumberWrapper, self).__init__(context, request)
-        self.portal = context
-        self.portal_url = self.portal.absolute_url()
         cartutil=getUtility(IShoppingCartUtility)
-        cart=cartutil.get(self.portal, create=True)
+        cart=cartutil.get(context, create=True)
         self.processor = queryAdapter(cart, IOffsitePaymentProcessor, 'getpaid.nmi.processor')
-        self.processor.options = self.processor.options_interface(self.portal)
         
     def contents(self):
         """This is the method that'll call your form.  You don't
@@ -87,3 +86,11 @@ class Thankyou(BrowserView):
             return "%s/@@getpaid-order/%s" % ( portal_url, self.getInvoice())
         else:
             return ''
+
+class Error(Thankyou):
+    """Class for checkout errors view
+    """
+    
+    def getCartURL(self):
+        portal_url = getSite().absolute_url()
+        return "%s/@@getpaid-cart" % portal_url
