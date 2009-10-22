@@ -1,21 +1,12 @@
-import urllib, urllib2
-import socket
 import logging
-import re
 import md5
 
 from zope.app.component.hooks import getSite
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from zope.component import getUtility, queryAdapter
 
 from getpaid.core.interfaces import IShoppingCartUtility, IOrderManager, \
-                                    ILineContainerTotals, IOffsitePaymentProcessor
-
-from getpaid.nmi.interfaces import IOptions
-from getpaid.nmi.nmi import _host
-
-from notification import Notification
+                                    IOffsitePaymentProcessor
 
 logger = logging.getLogger("getpaid.nmi")
 

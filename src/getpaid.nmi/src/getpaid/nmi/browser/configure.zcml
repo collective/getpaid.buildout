@@ -26,4 +26,8 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".views.CheckoutWidgets"
+      />
+
 </configure>

@@ -1,12 +1,35 @@
 <form method="post"
       class="nmicheckout"
-      tal:attributes="action view/ccnumber_view_url">
+      tal:attributes="action view/ccnumber_view_url"
+      tal:define="key_id view/context/key_id;
+	              server_url view/context/server_url; 
+                  redirect view/context/ipn_url;
+                  hash view/context/hash;
+                  amount view/context/amount;
+                  orderid hash/orderid;">
     <input type="hidden" name="analyticsdata" value="" />
+
+    <input type="hidden" name="type" value="sale" />
+    <input type="hidden" name="amount" value=""
+           tal:attributes="value amount" />
+    
+    <input type="hidden" name="server_url" value=""
+           tal:attributes="value server_url" />
+    <input type="hidden" name="redirect" value=""
+           tal:attributes="value redirect" />
+    <input type="hidden" name="key_id" value=""
+           tal:attributes="value key_id" />
+    <input type="hidden" name="hash" value=""
+           tal:attributes="value hash/value" />
+    <input type="hidden" name="time" value=""
+           tal:attributes="value hash/time" />
+    <input type="hidden" name="orderid" value=""
+           tal:attributes="value orderid" />
 
 	<input class="button context"
 	     type="submit"
 	     id="cart-nmi-checkout"
-	     name="NMI Checkout"
-	     value="Checkout"
-	     alt="Fast checkout through NMI" />
+	     name="Network Merchants Checkout"
+	     value="Network Merchants Checkout"
+	     alt="Fast checkout through Network Merchants" />
 </form>

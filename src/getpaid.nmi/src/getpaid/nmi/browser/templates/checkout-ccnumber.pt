@@ -10,90 +10,32 @@
       	<script>
       		<!--
       		jq(document).ready(function(){
-	      		jq('#nmicheckout').submit(function(){
+	      		jq('#skel-contents form').submit(function(){
 					cont = true;
-					if (jq('#form-widgets-ccnumber').val() == '') {
-						jq('#form-widgets-ccnumber').parent().parent().addClass('error');
-                        jq('#cart-nmi-checkout').removeClass('submitting');
+					if (jq('#ccnumber').val() == '') {
+						jq('#ccnumber').parent().parent().addClass('error');
+                        jq('.submitting').removeClass('submitting');
 						cont = false;
                         jq('.portalMessage').show()
 				    } else {
-						jq('#form-widgets-ccnumber').parent().parent().removeClass('error');
+						jq('#ccnumber').parent().parent().removeClass('error');
 					};
-                    if (jq('#form-widgets-ccexp').val() == '') {
-                        jq('#form-widgets-ccexp').parent().parent().addClass('error');
-                        jq('#cart-nmi-checkout').removeClass('submitting');
+                    if (jq('#ccexp').val() == '') {
+                        jq('#ccexp').parent().parent().addClass('error');
+                        jq('.submitting').removeClass('submitting');
                         cont = false;
                         jq('.portalMessage').show()
                     } else {
-                        jq('#form-widgets-ccexp').parent().parent().removeClass('error');
+                        jq('#ccexp').parent().parent().removeClass('error');
                     };
 					return cont;
 				});
 			});
 			-->
       	</script>
-		<form method="post"
-		      id="nmicheckout" 
-			  class="rowlike enableUnloadProtection"
-		      tal:attributes="action view/action_url"
-			  tal:define="key_id view/key_id;
-			              redirect view/ipn_url;
-			              hash view/hash;
-						  amount view/amount;
-						  orderid hash/orderid;">
-		    <input type="hidden" name="analyticsdata" value="" />
-		
-			<input type="hidden" name="type" value="sale" />
-		    <input type="hidden" name="amount" value=""
-			       tal:attributes="value amount" />
-			
-			<input type="hidden" name="redirect" value=""
-		           tal:attributes="value redirect" />
-			<input type="hidden" name="key_id" value=""
-		           tal:attributes="value key_id" />
-			<input type="hidden" name="hash" value=""
-				   tal:attributes="value hash/value" />
-			<input type="hidden" name="time" value=""
-		           tal:attributes="value hash/time" />
-		    <input type="hidden" name="orderid" value=""
-		           tal:attributes="value orderid" />
-		
 	      <div id="skel-contents">
 	        <span tal:replace="structure view/contents" />
 	      </div>
-		
-			<input class="button context"
-			     type="submit"
-			     id="cart-nmi-checkout"
-			     name="NMI Checkout"
-			     value="Checkout"
-			     alt="Fast checkout through NMI" />
-		</form>
       </div>
   </metal:block>
 </metal:page>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal"
-      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-      lang="en"
-      metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plone.z3cform">
-<body>
-
-  <metal:main fill-slot="main">
-    <tal:main-macro metal:define-macro="main">
-
-      <h1 class="documentFirstHeading" tal:content="view/label">Title</h1>
-
-      <div id="skel-contents">
-        <span tal:replace="structure view/contents" />
-      </div>
-
-    </tal:main-macro>
-</metal:main>
-
-</body>
-</html>
-

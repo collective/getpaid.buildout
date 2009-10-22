@@ -82,12 +82,13 @@ Checkout button:
     ...<th>Total</th><td>10.00</td>...
     ...<form method="post"
              class="nmicheckout"
-             action="https://secure.nmi.com/api/transact.php">
+             action="http://nohost/plone/@@getpaid.nmi.ccnumber">
          <input type="hidden" name="analyticsdata" value="" />
     ...
          <input class="button context" type="submit" 
-                id="cart-nmi-checkout" name="NMI Checkout" 
-                value="Checkout" alt="Fast checkout through NMI" />
+                id="cart-nmi-checkout" name="Network Merchants Checkout" 
+                value="Network Merchants Checkout" 
+                alt="Fast checkout through Network Merchants" />
        </form>...
 
 The cart portlet also uses the NMI Checkout button:
@@ -99,17 +100,8 @@ The cart portlet also uses the NMI Checkout button:
          <dd class="portletFooter">
            <form method="post"
                  class="nmicheckout"
-                 action="https://secure.nmi.com/api/transact.php">
-             <input type="hidden" name="analyticsdata" value="" />
+                 action="http://nohost/plone/@@getpaid.nmi.ccnumber">
              ...
-             <input class="button context" type="submit" 
-                    id="cart-nmi-checkout" name="NMI Checkout" 
-                    value="Checkout" alt="Fast checkout through NMI" />
-           </form>
-           <span class="portletBottomLeft"></span>
-           <span class="portletBottomRight"></span>
-         </dd>
-        </dl>...
 
 Note the there is a hidden input to support integration with Google
 Analytics. This input is populated via JavaScript before the form is
@@ -119,7 +111,8 @@ submitted. For demonstration lets populate that with some data:
 
 The checkout action redirects the user to NMI Checkout.
 
-    >>> browser.getControl('Checkout', index=0).click()
-    >>> browser.url
-    'https://www.sandbox.nmi.com/cgi-bin/webscr'
+    >>> browser.getControl(name='Network Merchants Checkout', index=0).click()
 
+    >>> browser.getControl(name="ccnumber").value = '4111111111111111'
+    >>> browser.getControl(name="ccexp").value = '1010'
+    

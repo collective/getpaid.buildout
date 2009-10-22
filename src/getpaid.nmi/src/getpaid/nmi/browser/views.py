@@ -1,21 +1,14 @@
-import md5
-from datetime import datetime
-from cPickle import loads, dumps
-
-from AccessControl import getSecurityManager
-from zope.component import getUtility, queryAdapter
+from zope.component import getUtility, queryAdapter, adapts
 from zope.app.component.hooks import getSite
 from zope import interface, schema
 
 from z3c.form import form, field, button
+from z3c.form.interfaces import IFormLayer, HIDDEN_MODE
 from plone.z3cform.layout import FormWrapper, wrap_form
+from plone.z3cform import z2
 from Products.Five.browser import BrowserView
 
-from Products.PloneGetPaid.interfaces import IGetPaidManagementOptions
-from getpaid.core.interfaces import IShoppingCartUtility, IOrderManager, \
-                                    ILineContainerTotals, IOffsitePaymentProcessor
-from getpaid.core.order import Order
-from getpaid.core import payment
+from getpaid.core.interfaces import IShoppingCartUtility, IOffsitePaymentProcessor
 
 class CheckoutButton(BrowserView):
     """page for NMI button
@@ -28,11 +21,31 @@ class CheckoutCCNumberSchema(interface.Interface):
     ccnumber = schema.TextLine(title=u"Credit Card Number")
     ccexp = schema.TextLine(title=u"Expiration")
 
+class CheckoutProcessorSchema(interface.Interface):
+    # hidden fields received from request
+    type = schema.TextLine()
+    amount = schema.TextLine()
+    redirect = schema.TextLine()
+    key_id = schema.TextLine()
+    time = schema.TextLine()
+    orderid = schema.TextLine()
+
 class CheckoutCCNumberForm(form.Form):
     fields = field.Fields(CheckoutCCNumberSchema)
+    fields += field.Fields(CheckoutProcessorSchema, mode = HIDDEN_MODE)
     ignoreContext = True # don't use context to get widget data
     label = u"Please enter your credit card information"
+    prefix = '' # NMI external processor needs unprefixed fields
 
+    @button.buttonAndHandler(u'Network Merchants Secure Payment')
+    def handlePay(self, action):
+        pass
+    
+class CheckoutWidgets(field.FieldWidgets):
+    adapts(CheckoutCCNumberForm, IFormLayer, interface.Interface)
+    
+    prefix = '' # NMI external processor needs unprefixed fields
+    
 class CheckoutCCNumberWrapper(FormWrapper):
     """page for NMI button
     """
@@ -46,66 +59,15 @@ class CheckoutCCNumberWrapper(FormWrapper):
         self.processor = queryAdapter(cart, IOffsitePaymentProcessor, 'getpaid.nmi.processor')
         self.processor.options = self.processor.options_interface(self.portal)
         
-    def action_url(self):
-        return self.processor.server_url
-        
-    def key_id(self):
-        return self.processor.key_id
-
-    def amount(self):
-        cartutil=getUtility(IShoppingCartUtility)
-        cart=cartutil.get(self.portal)
-        total = ILineContainerTotals(cart).getTotalPrice()
-        return '%.2f' % total
-
-    def hash(self):
-        key = self.processor.key
-        time = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-        orderid = self.orderid()
-        m = md5.new()
-        m.update("%s|%s|%s|%s" % (orderid,
-                                  self.amount(),
-                                  time,
-                                  key))
-        return {'value': m.hexdigest(),
-                'time': time,
-                'orderid': orderid}
-
-    def return_url(self):
-        return self.portal_url + '/@@getpaid.nmi.thank-you'
-
-    def ipn_url(self):
-        return self.portal_url + '/@@getpaid.nmi.ipnreactor'
-
-    def orderid(self):
-        cartutil=getUtility(IShoppingCartUtility)
-        cart=cartutil.get(self.portal)
-        # we'll get the order_manager, create the new order, and store it.
-        order_manager = getUtility(IOrderManager)
-        new_order_id = order_manager.newOrderId()
-        order = Order()
-        
-        # register the payment processor name to make the workflow handlers happy
-        order.processor_id = 'getpaid.nmi.processor'
-        
-        # FIXME: registering an empty contact information list for now - need to populate this from user
-        # if possible
-        order.contact_information = payment.ContactInformation()
-        order.billing_address = payment.BillingAddress()
-        order.shipping_address = payment.ShippingAddress()
-
-        order.order_id = new_order_id
-        
-        # make cart safe for persistence by using pickling
-        order.shopping_cart = loads(dumps(cart))
-        order.user_id = getSecurityManager().getUser().getId()
-
-        order.finance_workflow.fireTransition('create')
-        order.finance_workflow.fireTransition('authorize')
-        
-        order_manager.store(order)
-
-        return order.order_id
+    def contents(self):
+        """This is the method that'll call your form.  You don't
+        usually override this.
+        """
+        # A call to 'switch_on' is required before we can render
+        # z3c.forms within Zope 2.
+        z2.switch_on(self, request_layer=self.request_layer)
+        self.request.getURL = self.processor.server_url
+        return self.render_form()
 
 CheckoutCCNumber = wrap_form(CheckoutCCNumberForm, CheckoutCCNumberWrapper)
 

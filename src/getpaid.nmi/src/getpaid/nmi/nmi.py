@@ -1,8 +1,16 @@
 """
 """
 import md5
-from DateTime import DateTime
+from datetime import datetime
+from cPickle import loads, dumps
+from AccessControl import getSecurityManager
+from zope.component import getUtility
+from zope.app.component.hooks import getSite
 from getpaid.core.processors import OffsitePaymentProcessor
+from getpaid.core.interfaces import IShoppingCartUtility, IOrderManager, \
+                                    ILineContainerTotals
+from getpaid.core import payment
+from getpaid.core.order import Order
 from getpaid.nmi.interfaces import IOptions
 
 _host = "https://secure.nmi.com/api/transact.php"
@@ -16,13 +24,15 @@ class StandardProcessor(OffsitePaymentProcessor):
 
     checkout_button = 'getpaid.nmi.checkout-button'
 
+    type = 'sale'
+    
     @property
     def server_url(self):
         return _host
 
     @property
     def key_id(self):
-        if self.options.server_url == "Test":
+        if getattr(self.options, "server_url", "Test") == "Test":
             key = _test_key_id
         else:
             key = self.options.merchant_id
@@ -30,118 +40,60 @@ class StandardProcessor(OffsitePaymentProcessor):
 
     @property
     def key(self):
-        if self.options.server_url == "Test":
+        if getattr(self.options, "server_url", "Test") == "Test":
             key = _test_key
         else:
             key = self.options.merchant_key
         return key
-#
-#from zope.interface import implements
-#from zope.component import getUtility
-#
-#from getpaid.core.interfaces  import IShoppingCartUtility
-#from getpaid.nmi.interfaces import INMIOptions
-#from getpaid.nmi.interfaces import INMIWizard
-#from getpaid.nmi.interfaces import INMIController
-#from getpaid.nmi.interfaces import INMIShipping
-#
-#from cgi import escape
-#
-#
-#def gcart_item(entry, options):
-#    return gmodel.item_t(
-#        name = entry.name,
-#        description = entry.description,
-#        unit_price = gmodel.price_t(
-#            value = entry.cost,
-#            currency = options.currency,
-#            ),
-#        quantity = entry.quantity,
-#        merchant_item_id = entry.product_code,
-#        )
-#
-#
-#class NMIWizard(object):
-#
-#    implements(INMIWizard)
-#
-#    options_interface = INMIOptions
-#    checkout_button_view_name = 'getpaid-nmi-checkout-button'
-#
-#    def __init__( self, context ):
-#        self.context = context
-#        self._controller = None
-#
-#    def getController( self ):
-#        if self._controller is None:
-#            self._controller = INMIController(self.context)
-#        return self._controller
-#
-#    controller = property(getController)
-#
-#    def checkout_shopping_cart(self, cart, analytics_data=None):
-#        options = INMIOptions(self.context)
-#        cart_key = getUtility(IShoppingCartUtility).getKey(self.context)
-#        edit_cart_url = '%s/getpaid-cart' % self.context.absolute_url()
-#        continue_shopping_url = self.context.absolute_url()
-#        return gmodel.checkout_shopping_cart_t(
-#            shopping_cart = gmodel.shopping_cart_t(
-#                items = [gcart_item(entry, options) for entry in cart.values()],
-#                merchant_private_data={'cart-key': cart_key},
-#                ),
-#            checkout_flow_support = gmodel.checkout_flow_support_t(
-#                shipping_methods = INMIShipping(self.context)(cart),
-#                analytics_data = analytics_data,
-#                edit_cart_url = edit_cart_url,
-#                continue_shopping_url = continue_shopping_url,
-#                ),
-#            )
-#
-#    def checkout(self, cart, analytics_data=None):
-#        checkout_shopping_cart = self.checkout_shopping_cart(cart,
-#                                                             analytics_data)
-#        request = checkout_shopping_cart.toxml()
-#        response = self.controller.send_xml(request)
-#        __traceback_supplement__ = (TracebackSupplement, request, response)
-#        return gxml.Document.fromxml(response).redirect_url
-#
-#    def notify(self, xml):
-#        __traceback_supplement__ = (NotifyTracebackSupplement, xml)
-#        return self.controller.receive_xml(xml)
-#
-#
-#
-#
-#class TracebackSupplement:
-#
-#    def __init__(self, request, response):
-#        self.request = request
-#        self.response = response
-#
-#    def format_text(self, name):
-#        value = getattr(self, name)
-#        return '   - %s:\n      %s' % (name, value.replace('\n', '\n      '))
-#
-#    def format_html(self, name):
-#        value = getattr(self, name)
-#        return '<dt>%s:</dt><dd><pre>%s</pre></dd>' % (name, escape(value))
-#
-#    def getInfo(self, as_html=0):
-#        if not as_html:
-#            return '%s\n%s' % (self.format_text('request'),
-#                               self.format_text('response'))
-#        else:
-#            return '<dl>%s%s</dl>' % (self.format_html('request'),
-#                                      self.format_html('response'))
-#
-#
-#class NotifyTracebackSupplement(TracebackSupplement):
-#
-#    def __init__(self, xml):
-#        self.xml = xml
-#
-#    def getInfo(self, as_html=0):
-#        if not as_html:
-#            return '%s' % self.format_text('xml')
-#        else:
-#            return '<dl>%s</dl>' % self.format_html('xml')
+
+    def ipn_url(self):
+        return getSite().absolute_url() + '/@@getpaid.nmi.ipnreactor'
+
+    def hash(self):
+        key = self.key
+        time = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+        orderid = self.orderid()
+        m = md5.new()
+        m.update("%s|%s|%s|%s" % (orderid,
+                                  self.amount(),
+                                  time,
+                                  key))
+        return {'value': m.hexdigest(),
+                'time': time,
+                'orderid': orderid}
+
+    def amount(self):
+        cartutil=getUtility(IShoppingCartUtility)
+        cart=cartutil.get(getSite())
+        total = ILineContainerTotals(cart).getTotalPrice()
+        return '%.2f' % total
+
+    def orderid(self):
+        cartutil=getUtility(IShoppingCartUtility)
+        cart=cartutil.get(getSite())
+        # we'll get the order_manager, create the new order, and store it.
+        order_manager = getUtility(IOrderManager)
+        new_order_id = order_manager.newOrderId()
+        order = Order()
+        
+        # register the payment processor name to make the workflow handlers happy
+        order.processor_id = 'getpaid.nmi.processor'
+        
+        # FIXME: registering an empty contact information list for now - need to populate this from user
+        # if possible
+        order.contact_information = payment.ContactInformation()
+        order.billing_address = payment.BillingAddress()
+        order.shipping_address = payment.ShippingAddress()
+
+        order.order_id = new_order_id
+        
+        # make cart safe for persistence by using pickling
+        order.shopping_cart = loads(dumps(cart))
+        order.user_id = getSecurityManager().getUser().getId()
+
+        order.finance_workflow.fireTransition('create')
+        order.finance_workflow.fireTransition('authorize')
+        
+        order_manager.store(order)
+
+        return order.order_id
