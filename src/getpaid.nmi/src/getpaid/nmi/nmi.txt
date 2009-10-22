@@ -1,0 +1,35 @@
+Provide the processor with details about the Google Checkout merchant
+account:
+
+    >>> from getpaid.nmi.interfaces import IOptions
+    >>> options = IOptions(portal)
+    >>> options.merchant_id = '1234567890'
+    >>> options.merchant_key = 'HsYXFoZfHAqyLcCRYeH8qQ'
+    >>> options.server_url = 'Sandbox'
+
+Create a shopping cart:
+
+    >>> from zope.component import getUtility
+    >>> from getpaid.core.interfaces import IShoppingCartUtility
+    >>> cart = getUtility(IShoppingCartUtility).get(portal, create=True)
+
+and add a couple of entries to this cart:
+
+    >>> from getpaid.core.item import LineItem
+    >>> line = LineItem()
+    >>> line.item_id = 'book-9789988647131'
+    >>> line.name = 'Not Without Flowers'
+    >>> line.description = 'ISBN: 9789988647131'
+    >>> line.cost = 19.95
+    >>> line.product_code = '9789988647131'
+    >>> line.quantity = 2
+    >>> cart[line.item_id] = line
+
+    >>> line = LineItem()
+    >>> line.item_id = 'book-9789780232412'
+    >>> line.name = 'Echoes from the Mountain'
+    >>> line.description = 'ISBN: 9789780232412'
+    >>> line.product_code = '9789780232412'
+    >>> line.cost = 14.95
+    >>> line.quantity = 1
+    >>> cart[line.item_id] = line

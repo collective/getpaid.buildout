@@ -1,0 +1,7 @@
+<html>
+<head><title>NMI IPN Reactor</title></head>
+  <body>
+    <p>NMI IPN reactor</p>
+    <span tal:replace="structure view/process">results</span>
+  </body>
+</html>

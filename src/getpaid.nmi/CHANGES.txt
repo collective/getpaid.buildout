@@ -1,0 +1,18 @@
+=======
+CHANGES
+=======
+
+
+0.3 (2008-12-30)
+----------------
+
+* Remove code not needed now with gchecky 0.2.1. And update tests to suit.
+* Override the cart portlet to use Google Checkout.
+
+
+0.2 (2008-08-29)
+----------------
+
+* Eggified package
+* Added buildout files and general text documents to project root.
+* removed setup.cfg

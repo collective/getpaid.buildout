@@ -1,0 +1,48 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plonegetpaid">
+
+<body>
+<div metal:define-macro="portlet"
+     tal:define="portlet view;
+                 view context/@@getpaid-shopping-cart;">
+
+    <dl class="portlet" id="portlet-cart"
+	tal:condition="python: (view.cart or view.isContextAddable()) and view.size()!=0">
+
+        <dt class="portletHeader">
+            <span class="portletTopLeft"></span>
+            <span class="portletTopMiddle" i18n:translate="text_your_cart">Your Cart</span>
+            <span class="portletTopRight"></span>
+        </dt>
+
+        <dd class="portletItem">
+            <span i18n:translate="text_contains_items">Contains <span tal:content="view/size" i18n:name="size"> 5 </span> Items</span>
+        </dd>
+
+        <dd class="portletFooter">
+            <a href="" tal:attributes="href string:${context/portal_url}/@@getpaid-cart"
+               i18n:translate="label_manage_cart">
+              Manage Cart
+            </a>
+        </dd>
+        <dd class="portletFooter">
+          <form method="post"
+                class="googlecheckout"
+                tal:attributes="action string:${context/portal_url}/google-checkout">
+            <input type="hidden" name="analyticsdata" value="" />
+            <input type="image"
+                   id="portlet-cart-google-checkout"
+                   name="Google Checkout"
+                   alt="Fast checkout through Google"
+                   src="http://sandbox.google.com/checkout/buttons/checkout.gif?merchant_id=1234567890&w=160&h=43&style=white&variant=text&loc=en_US"
+                   tal:attributes="src portlet/googleCheckoutButtonUrl" />
+          </form>
+            <span class="portletBottomLeft"></span>
+            <span class="portletBottomRight"></span>
+        </dd>
+    </dl>
+
+</div>
+</body>
+</html>

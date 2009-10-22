@@ -1,0 +1,12 @@
+<form method="post"
+      class="nmicheckout"
+      tal:attributes="action view/ccnumber_view_url">
+    <input type="hidden" name="analyticsdata" value="" />
+
+	<input class="button context"
+	     type="submit"
+	     id="cart-nmi-checkout"
+	     name="NMI Checkout"
+	     value="Checkout"
+	     alt="Fast checkout through NMI" />
+</form>

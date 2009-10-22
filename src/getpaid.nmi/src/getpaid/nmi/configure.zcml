@@ -1,0 +1,23 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n">
+
+   <i18n:registerTranslations directory="locales" />
+   <includeDependencies package="." />
+    
+   <adapter
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      provides=".interfaces.IOptions"
+      factory=".Options" />
+
+   <adapter
+      for="getpaid.core.interfaces.IShoppingCart"
+      provides="getpaid.core.interfaces.IOffsitePaymentProcessor"
+      name="getpaid.nmi.processor"
+      factory=".nmi.StandardProcessor" />
+
+   <include package=".browser" />
+   <include package=".ipn" />
+   <include file="vocabulary.zcml" />
+
+</configure>

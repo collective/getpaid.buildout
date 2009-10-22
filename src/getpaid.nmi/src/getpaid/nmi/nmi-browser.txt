@@ -1,0 +1,125 @@
+Functional browser tests for NMI Checkout processor.
+
+General configuration
+=====================
+
+Create an admin user for managing the site:
+
+    >>> membership = self.portal.portal_membership
+    >>> membership.addMember('admin', 'secret', ['Member', 'Manager'], [])
+
+Create the browser object we'll be using:
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+
+Login as the site admin user:
+
+    >>> browser.open(portal.absolute_url())
+    >>> browser.getLink('Log in').click()
+    >>> browser.getControl('Login Name').value = 'admin'
+    >>> browser.getControl('Password').value = 'secret'
+    >>> browser.getControl('Log in').click()
+
+General configuration of GetPaid:
+
+    >>> browser.getLink('Site Setup').click()
+    >>> browser.getLink('GetPaid').click()
+    >>> browser.getLink('Content Types').click()
+    >>> from getpaid.nmi.tests.utils import setSelectWidget
+    >>> setSelectWidget(browser, 'form.buyable_types', ['Page'])
+    >>> browser.getControl('Apply').click()
+
+Make the site front page buyable so that we have something to add to
+the shopping cart for testing:
+
+    >>> browser.getLink('Home').click()
+    >>> browser.getLink('Make Buyable').click()
+    >>> browser.getControl(name='form.product_code').value = '1234-ADSF'
+    >>> browser.getControl(name='form.price').value = '10.00'
+    >>> browser.getControl('Activate').click()
+
+
+NMI Checkout processor configuration
+=======================================
+
+Configure GetPaid to use NMI Checkout (and allow anonymous checkouts):
+
+    >>> browser.getLink('Site Setup').click()
+    >>> browser.getLink('GetPaid').click()
+    >>> browser.getLink('Payment Options').click()
+    >>> setSelectWidget(browser, 'form.offsite_payment_processors', ['Off-site NMI Checkout'])
+    >>> browser.getControl(name='form.allow_anonymous_checkout').value = 'on'
+    >>> browser.getControl('Apply').click()
+
+Configure NMI Checkout processor:
+
+    >>> browser.getLink('GetPaid').click()
+    >>> browser.getLink('Payment Processor Settings').click()
+    >>> browser.getControl(name="form.charge-it.server_url").value = ['Test']
+    >>> browser.getControl('Apply').click()
+
+Finished with the configuration so we can now log out:
+
+    >>> browser.getLink('Log out').click()
+
+
+Checkout process
+================
+
+Visit the home page and add to the cart:
+
+    >>> browser.getLink('Home').click()
+    >>> browser.getControl('Add to Cart').click()
+
+Which renders the populated cart for the visitor with a NMI
+Checkout button:
+
+    >>> print browser.contents
+    <!DOCTYPE html ...
+    ...<h3>Your Shopping Cart</h3>...
+    ...<th>Total</th><td>10.00</td>...
+    ...<form method="post"
+             class="nmicheckout"
+             action="https://secure.nmi.com/api/transact.php">
+         <input type="hidden" name="analyticsdata" value="" />
+    ...
+         <input class="button context" type="submit" 
+                id="cart-nmi-checkout" name="NMI Checkout" 
+                value="Checkout" alt="Fast checkout through NMI" />
+       </form>...
+
+The cart portlet also uses the NMI Checkout button:
+
+    >>> print browser.contents
+    <!DOCTYPE html ...
+    ...<dl class="portlet" id="portlet-cart">
+         ...
+         <dd class="portletFooter">
+           <form method="post"
+                 class="nmicheckout"
+                 action="https://secure.nmi.com/api/transact.php">
+             <input type="hidden" name="analyticsdata" value="" />
+             ...
+             <input class="button context" type="submit" 
+                    id="cart-nmi-checkout" name="NMI Checkout" 
+                    value="Checkout" alt="Fast checkout through NMI" />
+           </form>
+           <span class="portletBottomLeft"></span>
+           <span class="portletBottomRight"></span>
+         </dd>
+        </dl>...
+
+Note the there is a hidden input to support integration with Google
+Analytics. This input is populated via JavaScript before the form is
+submitted. For demonstration lets populate that with some data:
+
+    >>> browser.getControl(name='analyticsdata', index=0).value = '00000000'
+
+The checkout action redirects the user to NMI Checkout.
+
+    >>> browser.getControl('Checkout', index=0).click()
+    >>> browser.url
+    'https://www.sandbox.nmi.com/cgi-bin/webscr'
+
