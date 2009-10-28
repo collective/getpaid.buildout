@@ -3,8 +3,9 @@
            xmlns:i18n="http://namespaces.zope.org/i18n">
 
    <i18n:registerTranslations directory="locales" />
-   <includeDependencies package="." />
-    
+   <include package="plone.z3cform" />
+   <include package="getpaid.core" />
+
    <adapter
       for="Products.CMFCore.interfaces.ISiteRoot"
       provides=".interfaces.IOptions"
