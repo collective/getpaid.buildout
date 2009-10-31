@@ -4,12 +4,14 @@ import md5
 from datetime import datetime
 from cPickle import loads, dumps
 from AccessControl import getSecurityManager
+from zope import component, interface
 from zope.component import getUtility
 from zope.app.component.hooks import getSite
 from getpaid.core.processors import OffsitePaymentProcessor
 from getpaid.core.interfaces import IShoppingCartUtility, IOrderManager, \
                                     ILineContainerTotals
 from getpaid.core import payment
+from getpaid.core.interfaces import IWorkflowPaymentProcessorIntegration
 from getpaid.core.order import Order
 from getpaid.nmi.interfaces import IOptions
 
@@ -26,7 +28,6 @@ class StandardProcessor(OffsitePaymentProcessor):
 
     type = 'sale'
     
-    @property
     def server_url(self):
         return _host
 
@@ -78,7 +79,7 @@ class StandardProcessor(OffsitePaymentProcessor):
         
         # register the payment processor name to make the workflow handlers happy
         order.processor_id = 'getpaid.nmi.processor'
-        
+
         # FIXME: registering an empty contact information list for now - need to populate this from user
         # if possible
         order.contact_information = payment.ContactInformation()
@@ -92,7 +93,7 @@ class StandardProcessor(OffsitePaymentProcessor):
         order.user_id = getSecurityManager().getUser().getId()
 
         order.finance_workflow.fireTransition('create')
-        order.finance_workflow.fireTransition('authorize')
+#        order.finance_workflow.fireTransition('authorize')
         
         order_manager.store(order)
 

@@ -97,11 +97,13 @@ The cart portlet also uses the NMI Checkout button:
     <!DOCTYPE html ...
     ...<dl class="portlet" id="portlet-cart">
          ...
-         <dd class="portletFooter">
-           <form method="post"
-                 class="nmicheckout"
-                 action="http://nohost/plone/@@getpaid.nmi.ccnumber">
-             ...
+
+# XXX: Doesn't work!
+#         <dd class="portletFooter">
+#           <form method="post"
+#                 class="nmicheckout"
+#                 action="http://nohost/plone/@@getpaid.nmi.ccnumber">
+#             ...
 
 Note the there is a hidden input to support integration with Google
 Analytics. This input is populated via JavaScript before the form is
