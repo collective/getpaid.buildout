@@ -19,5 +19,13 @@
 
    <include package=".browser" />
    <include package=".ipn" />
+   <includeOverrides file="overrides.zcml" />
+   
+  <adapter
+     for=".nmi.INMIOrder
+          getpaid.core.interfaces.IDefaultFinanceWorkflow"
+     provides="getpaid.core.interfaces.IWorkflowPaymentProcessorIntegration"
+     factory=".nmi.FinanceProcessorIntegration"
+     />
 
 </configure>

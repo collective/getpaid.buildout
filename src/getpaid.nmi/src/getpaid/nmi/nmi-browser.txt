@@ -57,7 +57,7 @@ Configure NMI Checkout processor:
 
     >>> browser.getLink('GetPaid').click()
     >>> browser.getLink('Payment Processor Settings').click()
-    >>> browser.getControl(name="form.charge-it.server_url").value = ['Test']
+    >>> browser.getControl(name="form.getpaid.nmi.processor.server_url").value = ['Test']
     >>> browser.getControl('Apply').click()
 
 Finished with the configuration so we can now log out:

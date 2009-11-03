@@ -5,28 +5,49 @@ from datetime import datetime
 from cPickle import loads, dumps
 from AccessControl import getSecurityManager
 from zope import component, interface
+from zope.interface import implements
 from zope.component import getUtility
+try:
+    from zope.annotation.interfaces import IAttributeAnnotatable
+    from zope.annotation.interfaces import IAnnotations
+except ImportError:
+    # BBB for Zope 2.9
+    from zope.app.annotation.interfaces import IAttributeAnnotatable
+    from zope.app.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 from getpaid.core.processors import OffsitePaymentProcessor
 from getpaid.core.interfaces import IShoppingCartUtility, IOrderManager, \
                                     ILineContainerTotals
 from getpaid.core import payment
-from getpaid.core.interfaces import IWorkflowPaymentProcessorIntegration
-from getpaid.core.order import Order
+from getpaid.core import interfaces
+from getpaid.core.order import Order as BaseOrder
 from getpaid.nmi.interfaces import IOptions
 
 _host = "https://secure.nmi.com/api/transact.php"
 _test_key_id = "449510"
 _test_key = "\!b2#I/wu%)4_tUdpAxO|GDWW?20:V.w"
 
+class INMIOrder(interfaces.IOrder):
+    """
+    """
+    
+class Order(BaseOrder):
+    """
+    """
+    implements(INMIOrder)
+    
 class StandardProcessor(OffsitePaymentProcessor):
-    name = 'charge-it'
+    name = 'getpaid.nmi.processor'
     title = u'Off-site NMI Checkout'
     options_interface = IOptions
 
     checkout_button = 'getpaid.nmi.checkout-button'
 
     type = 'sale'
+
+    def __init__(self, cart):
+        super(OffsitePaymentProcessor, self).__init__(cart)
+        self.options = self.options_interface(getSite())
     
     def server_url(self):
         return _host
@@ -93,8 +114,14 @@ class StandardProcessor(OffsitePaymentProcessor):
         order.user_id = getSecurityManager().getUser().getId()
 
         order.finance_workflow.fireTransition('create')
-#        order.finance_workflow.fireTransition('authorize')
+        order.finance_workflow.fireTransition('authorize')
         
         order_manager.store(order)
 
         return order.order_id
+
+class FinanceProcessorIntegration(payment.DefaultFinanceProcessorIntegration):
+
+    def __call__( self, event ):
+        # NMI processor is async, so just return
+        return  
