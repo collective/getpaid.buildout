@@ -2,10 +2,10 @@
 # created by: svn propset svn:externals -F ./EXTERNALS.txt .
 
 # PloneGetPaid product
-Products.PloneGetPaid https://getpaid.googlecode.com/svn/Products.PloneGetPaid/trunk/
+Products.PloneGetPaid https://getpaid.googlecode.com/svn/Products.PloneGetPaid/branches/brandon-no-overrides
 
 # core
-getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/trunk
+getpaid.core https://getpaid.googlecode.com/svn/getpaid.core/branches/brandon-no-overrides
 
 # checkout wizards
 getpaid.wizard https://getpaid.googlecode.com/svn/getpaid.wizard/trunk
@@ -29,11 +29,11 @@ five.intid https://svn.plone.org/svn/collective/five.intid/trunk
 hurry.workflow https://getpaid.googlecode.com/svn/vendor/hurry.workflow/branches/0.9
 
 # payment processors
-getpaid.googlecheckout https://getpaid.googlecode.com/svn/getpaid.googlecheckout/trunk
-getpaid.authorizedotnet https://getpaid.googlecode.com/svn/getpaid.authorizedotnet/trunk
-getpaid.nullpayment https://getpaid.googlecode.com/svn/getpaid.nullpayment/trunk
+getpaid.googlecheckout https://getpaid.googlecode.com/svn/getpaid.googlecheckout/branches/brandon-no-overrides
+getpaid.authorizedotnet https://getpaid.googlecode.com/svn/getpaid.authorizedotnet/branches/brandon-no-overrides
+getpaid.nullpayment https://getpaid.googlecode.com/svn/getpaid.nullpayment/branches/brandon-no-overrides
 getpaid.paymentech https://getpaid.googlecode.com/svn/getpaid.paymentech/trunk
-getpaid.paypal https://getpaid.googlecode.com/svn/getpaid.paypal/trunk/
+getpaid.paypal https://getpaid.googlecode.com/svn/getpaid.paypal/branches/brandon-no-overrides
 getpaid.payflowpro https://getpaid.googlecode.com/svn/getpaid.payflowpro/trunk/
 getpaid.ogone https://getpaid.googlecode.com/svn/getpaid.ogone/trunk
 getpaid.pxpay https://getpaid.googlecode.com/svn/getpaid.pxpay/trunk
@@ -67,3 +67,4 @@ getpaid.formgen https://getpaid.googlecode.com/svn/getpaid.formgen/trunk/
 
 # PloneGetPaid Salesforce integration
 getpaid.SalesforcePloneFormGenAdapter https://getpaid.googlecode.com/svn/getpaid.SalesforcePloneFormGenAdapter/trunk/
+
