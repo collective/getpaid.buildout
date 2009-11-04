@@ -38,7 +38,8 @@ class Listener(BrowserView):
         if orderid in order_manager:
             order = order_manager.get(orderid)
             if response == '1': # Approved
-                order.finance_workflow.fireTransition('charge-charging')
+                order.finance_workflow.fireTransition('charge-charging',
+                    comment=responsetext)
                 cartutil.destroy(self.context)
                 logger.debug('received successful IPN payment notification for order %s' % orderid)
                 return self.request.response.redirect('%s/@@getpaid.nmi.thank-you?orderid=%s' %
