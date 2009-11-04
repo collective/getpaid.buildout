@@ -20,6 +20,7 @@ class IOptions( interfaces.IPaymentProcessorOptions ):
     server_url = schema.Choice(
         title = _(u"Server URL"),
         values = ( "Test", "Production" ),
+        default = "Test",
         )
 
     merchant_id = schema.ASCIILine( title = _(u"Merchant Id"))
