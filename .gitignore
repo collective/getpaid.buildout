@@ -1,3 +1,5 @@
+*.swp
+*~
 .installed.cfg
 .mr.developer.cfg
 bin/
